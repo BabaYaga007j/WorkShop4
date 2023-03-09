@@ -1,5 +1,10 @@
 package EmolyeeManager.interfaces;
 
+import java.sql.SQLException;
+
+import EmolyeeManager.exceptions.EmployeeAlreadyExistException;
+import EmolyeeManager.exceptions.EmployeeNotFound;
+import EmolyeeManager.exceptions.MobileNumberException;
 import EmolyeeManager.model.EmployeePojo;
 
 
@@ -12,8 +17,8 @@ A method to calculate the average salary of all employees
 
 public interface InterfaceEmployeeManager {
 	
-	int createContact(EmployeePojo employeeManagerPojo);
-	void removeEmployee(String firstName);
+	int createContact(EmployeePojo employeeManagerPojo) throws SQLException, EmployeeAlreadyExistException, MobileNumberException;
+	void removeEmployee(String firstName) throws SQLException, EmployeeNotFound, EmployeeAlreadyExistException;
 	void searchEmployee(String empID);
 	void sortBySalary();
 	void calculateavgSalary();

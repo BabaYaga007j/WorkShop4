@@ -1,22 +1,41 @@
 package EmolyeeManager.services;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import java.util.Scanner;
+
+import EmolyeeManager.dao.EmployeeAdd;
+import EmolyeeManager.dao.EmployeeRemove;
+import EmolyeeManager.exceptions.EmployeeAlreadyExistException;
+import EmolyeeManager.exceptions.EmployeeNotFound;
+import EmolyeeManager.exceptions.MobileNumberException;
 import EmolyeeManager.interfaces.InterfaceEmployeeManager;
 import EmolyeeManager.model.EmployeePojo;
+import EmolyeeManager.utility.IRegexEmployeeRegistration;
+import EmolyeeManager.utility.RegexEmployeeRegistration;
+
 
 public class ImpOfEmployeeManager implements InterfaceEmployeeManager
 {
 
+	static int sal=0;
+	static Scanner SCANNER = new  Scanner(System.in);
 	private static EmployeePojo[] employeePojo = new EmployeePojo[10];
 
+	static EmployeeAdd add = new  EmployeeAdd();
+	static EmployeeRemove remove = new EmployeeRemove();
+	static IRegexEmployeeRegistration regx = new RegexEmployeeRegistration();
+	
+	public int createContact(EmployeePojo employee) throws SQLException, EmployeeAlreadyExistException, MobileNumberException {
 
-	public int createContact(EmployeePojo employee) {
-
-		System.out.println("list of all Employee");
+	
 		int index = getIndexForNextEmptyLocation();
-		if(index != -1)
+		if(index != -1 && regx.validMobileNumber(employee.getFirstName()))
 		{
 		employeePojo[index]= employee;
 		System.out.println("Employee Added at index :: "+index);
+		add.addEmployee(employee);
 		printDetails();
 		}
 		else
@@ -37,7 +56,7 @@ public class ImpOfEmployeeManager implements InterfaceEmployeeManager
 		return -1;
 	}
 
-	public void removeEmployee(String firstName) 
+	public void removeEmployee(String firstName) throws SQLException, EmployeeNotFound, EmployeeAlreadyExistException 
 	{
 		boolean employeeRemoved= false;
 		for (int i = 0; i<employeePojo.length;i++)
@@ -47,6 +66,7 @@ public class ImpOfEmployeeManager implements InterfaceEmployeeManager
 				employeePojo[i]= null;
 				System.out.println(firstName + " has been removed .");
 				employeeRemoved=true;
+				remove.removeEmployee(firstName);
 				break;
 			}
 			
@@ -105,7 +125,6 @@ public class ImpOfEmployeeManager implements InterfaceEmployeeManager
 
 	public void calculateavgSalary()
 	{
-
 		int totalSalary=0;
 		int count =0;
 		for (int i =0; i<employeePojo.length;i++)

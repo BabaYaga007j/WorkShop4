@@ -1,7 +1,11 @@
 package EmolyeeManager.controller;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
+import EmolyeeManager.exceptions.EmployeeAlreadyExistException;
+import EmolyeeManager.exceptions.EmployeeNotFound;
+import EmolyeeManager.exceptions.MobileNumberException;
 import EmolyeeManager.interfaces.InterfaceEmployeeManager;
 import EmolyeeManager.model.EmployeePojo;
 import EmolyeeManager.services.ImpOfEmployeeManager;
@@ -23,7 +27,8 @@ public class EmployeeManagerMain {
 		InterfaceEmployeeManager employeeManager = new ImpOfEmployeeManager();
 
 		byte menueChoice =0;
-
+		try
+		{
 		do 
 		{
 			System.out.println("Welcome to EmployeeManager System");
@@ -76,6 +81,21 @@ public class EmployeeManagerMain {
 			System.out.println("Press 1 to continue "+'\n'+"Any number to exit");
 			menueChoice = SCANNER.nextByte();
 		}while(menueChoice==1);
+		}
+		catch (EmployeeAlreadyExistException e) {
+			System.out.println(e);
+		}
+		catch (EmployeeNotFound e) {
+			System.out.println(e);
+		}
+		catch (SQLException e) {
+			System.out.println(e);
+		}catch (MobileNumberException e) {
+			System.out.println(e);
+		}
+		catch (Exception e) {
+		System.out.println(e);
+		}
 		
 	}
 		
@@ -87,17 +107,13 @@ public class EmployeeManagerMain {
 			String empID = SCANNER.next();
 			employeeManagerPojo.setEmpID(empID);
 
-
 			System.out.println("Enter FirstName :: ");
 			String firstName= SCANNER.next();
 			employeeManagerPojo.setFirstName(firstName);
 
-
 			System.out.println("Enter LastName :: ");
 			String lastName= SCANNER.next();
 			employeeManagerPojo.setLastName(lastName);
-
-
 
 			System.out.println("Enter Phone Number :: ");
 			Long phoneNumber= SCANNER.nextLong();
